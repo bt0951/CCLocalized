@@ -77,7 +77,25 @@ export default class LocalizedLabel extends cc.Label {
     this.translateTo(this._key)
   }
 
+  onLoad() {
+    this._addEventListener()
+  }
 
+  onDestroy() {
+    this._removeEventListener()
+  }
+
+  private _addEventListener() {
+    cc.game.on('CHANGE_LANGUAGE', this._OnChangeLanguage, this)
+  }
+
+  private _removeEventListener() {
+    cc.game.off('CHANGE_LANGUAGE', this._OnChangeLanguage, this)
+  }
+
+  private _OnChangeLanguage(language: string) {
+    this.language = language
+  }
 
   public translateTo(key: string, ...args): string {
     this.key = key
