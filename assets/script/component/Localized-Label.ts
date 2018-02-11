@@ -63,10 +63,11 @@ export default class LocalizedLabel extends cc.Label {
   @property({
     type: Language
   })
-  private _language = Language.zh
+  private _language = Language[this._getSysLanguage()] || Language.zh
 
   @property({
     tooltip: '语言',
+    type: Language
   })
   get language() {
     return this._language
