@@ -1,9 +1,14 @@
-const { ccclass, property, executeInEditMode, inspector, requireComponent, menu } = cc._decorator
+const { ccclass, property, executeInEditMode, inspector, menu } = cc._decorator
 
 const Language = cc.Enum({
   zh: 0,
   en: 1
 })
+
+const languageMap = {
+  0: 'zh',
+  1: 'en'
+}
 
 @ccclass
 @executeInEditMode
@@ -62,7 +67,6 @@ export default class LocalizedLabel extends cc.Label {
 
   @property({
     tooltip: '语言',
-    type: Language
   })
   get language() {
     return this._language
@@ -107,9 +111,8 @@ export default class LocalizedLabel extends cc.Label {
   }
 
   private async _loadText() {
-    // let language = this._language
-    // `resources/i18n/Strings-${Object.keys(Language)[this._language]}.json`
-    let lan = Object.keys(Language)[this._language]
+    let sysLanguage = this._getSysLanguage()
+    let lan = languageMap[this.language] || sysLanguage
     let url = cc.url.raw(`resources/i18n/Strings-${lan}.json`)
     try {
       let str = await this._loadConfig(url)
@@ -130,6 +133,10 @@ export default class LocalizedLabel extends cc.Label {
         resolve(data)
       })
     })
+  }
+
+  private _getSysLanguage() {
+    return cc.sys.language
   }
 
 }
