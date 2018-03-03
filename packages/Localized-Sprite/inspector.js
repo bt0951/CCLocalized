@@ -27,6 +27,7 @@ Vue.component("Localized-Sprite", {
     <ui-prop v-prop="target.translate"></ui-prop>
     <div v-if="target.translate.value === true">
       <ui-prop v-prop="target.language" :multi-values="multi"></ui-prop>
+      <ui-prop v-prop="target.key"></ui-prop>
       <ui-prop style="padding-top: 10px" name="Localized Sprite Frame" tooltip="当前语言下渲染Sprite使用的SpriteFrame图片资源">
         <ui-asset class="flex-1"  type="sprite-frame" v-value="target.localizedSpriteFrame.value.uuid" :multi-values="spriteMulti"></ui-asset>
         <ui-button class="blue tiny" tooltip="{{T(\'COMPONENT.sprite.edit_tooltip\')}}" @confirm="editSprite"> {{T(\'COMPONENT.sprite.edit_button\')}} </ui-button>
