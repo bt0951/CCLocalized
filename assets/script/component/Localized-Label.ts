@@ -149,7 +149,7 @@ export default class LocalizedLabel extends cc.Label {
   }
 
   private _loadConfig(url) {
-    return new Promise<cc.Prefab>((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
       cc.loader.load(url, (err, data) => {
         if (err) {
           cc.error(err)

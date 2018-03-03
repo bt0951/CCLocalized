@@ -6,9 +6,14 @@
       "test3": "test3"
     }
   },
-  
+
   "pamaTest": {
     "test": "test%sgfdh"
+  },
+
+  "imgTest": {
+    "test": "http://wx1.sinaimg.cn/large/b1601727ly1flyehp56fvj20ld0hsn0p.jpg",
+    "test1": "http://wx4.sinaimg.cn/large/b1601727ly1fm7ktqhcccj20go07378s.jpg"
   }
 
 }
