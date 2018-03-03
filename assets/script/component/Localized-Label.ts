@@ -6,8 +6,8 @@ const Language = cc.Enum({
 })
 
 const languageMap = {
-  0: 'zh',
-  1: 'en'
+  0: cc.sys.LANGUAGE_CHINESE,
+  1: cc.sys.LANGUAGE_ENGLISH
 }
 
 @ccclass
@@ -79,6 +79,7 @@ export default class LocalizedLabel extends cc.Label {
 
   onLoad() {
     this._addEventListener()
+    this._changeLanguage()
   }
 
   onDestroy() {
@@ -94,7 +95,13 @@ export default class LocalizedLabel extends cc.Label {
   }
 
   private _OnChangeLanguage(language: string) {
-    this.language = language
+    let lan = this._getSysLanguage()
+    this._changeLanguage(lan)
+  }
+
+  private _changeLanguage(language?: string) {
+    let lan = language || this._getSysLanguage()
+    this.language = Language[lan]
   }
 
   public translateTo(key: string, ...args): string {
