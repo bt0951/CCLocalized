@@ -15,7 +15,6 @@ const languageMap = {
 @inspector('packages://Localized-Label/inspector.js')
 @menu('i18n:MAIN_MENU.component.renderers/Label')
 export default class LocalizedLabel extends cc.Label {
-
   // @property({
   //   override: true
   // })
@@ -26,8 +25,7 @@ export default class LocalizedLabel extends cc.Label {
   // })
   // public verticalAlign: cc.Label.VerticalAlign = cc.Label.VerticalAlign.CENTER
 
-  @property(Boolean)
-  private _translate: boolean = false
+  @property(Boolean) private _translate: boolean = false
 
   @property({
     tooltip: '是否翻译为本地语言文本',
@@ -41,11 +39,10 @@ export default class LocalizedLabel extends cc.Label {
     v && this.translateTo(this.key)
   }
 
-  @property
-  private _key: string = ''
+  @property private _key: string | string[] = ''
 
   @property({
-    tooltip: 'key路径',
+    tooltip: 'key路径'
   })
   get key() {
     return this._key
@@ -74,8 +71,10 @@ export default class LocalizedLabel extends cc.Label {
   }
   set language(v) {
     this._language = v
-    this.translateTo(this._key)
+    this.translate && this.translateTo(this.key, this._obj)
   }
+
+  @property(Object) private _obj: object = null
 
   onLoad() {
     this._addEventListener()
@@ -104,35 +103,62 @@ export default class LocalizedLabel extends cc.Label {
     this.language = Language[lan]
   }
 
-  public translateTo(key: string, ...args): string {
+  public translateTo(key: string | string[], obj?: object | object[]): string {
     this.key = key
-    this._setString(key, ...args)
+    this._obj = obj
+    this._setString(key, this._obj)
     return this.string
   }
 
-  private async _setString(key: string, ...args) {
+  private async _setString(key, data?) {
+    if (!key) {
+      cc.error('%s未配置key', this.name)
+      return
+    }
+    if (cc.js.isString(key)) {
+      let str = await this._getStrByKey(key, data)
+      this.string = str
+    } else if (Array.isArray(key)) {
+      let p = []
+      key.forEach((key, i) => p.push(this._getStrByKey(key, data && data[i])))
+      Promise.all(p)
+        .then(data => {
+          this.string = data.join('')
+        })
+        .catch(err => cc.error(err))
+    }
+  }
+
+  private async _getStrByKey(key: string, obj?: object) {
+    if (!key) {
+      cc.error('%s未配置key', this.name)
+      return
+    }
     let _str = key.split('.'),
       _len = _str.length
     let str = await this._loadText(),
-      obj = str[_str[0]]
+      _obj = str[_str[0]]
+    if (!_obj) {
+      cc.error('请检查key: %s配置是否有误', key)
+      return
+    }
     if (_len == 1) {
-      this.string = obj
+      return _obj
     } else {
       let _temp: string
       _str.forEach((s, i) => {
-        _temp = i == 0 ? obj : _temp[s]
+        _temp = i == 0 ? _obj : _temp[s]
       })
-      if (args.length > 0) {
-        let _optTemp = _temp.split('%s')
-        let _f1st = _optTemp[0]
-        args.forEach(arg => {
-          _optTemp.forEach(item => {
-            _temp = _f1st + arg
-          })
+      if (obj != null) {
+        let keys = Object.keys(obj)
+        keys.forEach(key => {
+          _temp = _temp.replace(
+            new RegExp('\\{\\{' + key + '\\}\\}', 'g'),
+            obj[key]
+          )
         })
-        _temp = args.length > 0 ? _temp : _f1st
       }
-      this.string = _temp
+      return _temp
     }
   }
 
@@ -142,6 +168,7 @@ export default class LocalizedLabel extends cc.Label {
     let url = cc.url.raw(`resources/i18n/Strings-${lan}.json`)
     try {
       let str = await this._loadConfig(url)
+      cc.Strings = str
       return str
     } catch (error) {
       cc.error(JSON.stringify(error))
@@ -149,7 +176,7 @@ export default class LocalizedLabel extends cc.Label {
   }
 
   private _loadConfig(url) {
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<cc.Prefab>((resolve, reject) => {
       cc.loader.load(url, (err, data) => {
         if (err) {
           cc.error(err)
@@ -164,5 +191,4 @@ export default class LocalizedLabel extends cc.Label {
   private _getSysLanguage() {
     return cc.sys.language
   }
-
 }
