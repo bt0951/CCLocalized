@@ -8,7 +8,7 @@
   },
 
   "pamaTest": {
-    "test": "测试%s测试"
+    "test": "测试{{test}}测试"
   },
 
   "imgTest": {

@@ -59,7 +59,7 @@
         "__id__": 3
       },
       {
-        "__id__": 4
+        "__id__": 5
       }
     ],
     "_tag": -1,
@@ -116,7 +116,11 @@
     "_children": [],
     "_tag": -1,
     "_active": true,
-    "_components": [],
+    "_components": [
+      {
+        "__id__": 4
+      }
+    ],
     "_prefab": null,
     "_id": "8eOtTnbRJDQrkvCYmjwPxP",
     "_opacity": 255,
@@ -135,7 +139,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 102.25,
+      "width": 86.72,
       "height": 40
     },
     "_rotationX": 0,
@@ -144,8 +148,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+      "x": -43,
+      "y": 167
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -153,6 +157,32 @@
     "_globalZOrder": 0,
     "_opacityModifyRGB": false,
     "groupIndex": 0
+  },
+  {
+    "__type__": "b01edCvzZ5GMJtAnTKpvpD1",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 3
+    },
+    "_enabled": true,
+    "_useOriginalSize": false,
+    "_actualFontSize": 40,
+    "_fontSize": 40,
+    "_lineHeight": 40,
+    "_enableWrapText": true,
+    "_N$file": null,
+    "_isSystemFontUsed": true,
+    "_spacingX": 0,
+    "_N$string": "test2",
+    "_N$horizontalAlign": 0,
+    "_N$verticalAlign": 0,
+    "_N$fontFamily": "Arial",
+    "_N$overflow": 0,
+    "_translate": true,
+    "_key": "test2.test2",
+    "_language": 1,
+    "_obj": null
   },
   {
     "__type__": "cc.Node",
@@ -166,7 +196,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 5
+        "__id__": 6
       }
     ],
     "_prefab": null,
@@ -187,8 +217,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 600,
-      "height": 255
+      "width": 142,
+      "height": 59
     },
     "_rotationX": 0,
     "_rotationY": 0,
@@ -211,11 +241,11 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 4
+      "__id__": 5
     },
     "_enabled": true,
     "_spriteFrame": {
-      "__id__": 6
+      "__uuid__": "76faf000-1a61-423a-8121-06f7ebf3b66c"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -233,31 +263,11 @@
     "_atlas": null,
     "_translate": true,
     "_key": "imgTest.test1",
-    "_url": "http://wx4.sinaimg.cn/large/b1601727ly1fm7ktqhcccj20go07378s.jpg",
-    "_language": 1,
+    "_url": "http://localhost:3333/images/85D10B5F40C169157FB494238849BF89.jpg",
+    "_language": 0,
+    "_SpriteFrames": {},
     "_localizedSpriteFrame": {
       "__uuid__": "76faf000-1a61-423a-8121-06f7ebf3b66c"
-    }
-  },
-  {
-    "__type__": "cc.SpriteFrame",
-    "content": {
-      "name": "",
-      "atlas": "",
-      "rect": [
-        0,
-        0,
-        600,
-        255
-      ],
-      "offset": [
-        0,
-        0
-      ],
-      "originalSize": [
-        600,
-        255
-      ]
     }
   },
   {

@@ -8,7 +8,7 @@
   },
 
   "pamaTest": {
-    "test": "test%sgfdh"
+    "test": "test{{test}}test"
   },
 
   "imgTest": {
