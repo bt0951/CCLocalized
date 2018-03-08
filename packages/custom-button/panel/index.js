@@ -8,7 +8,7 @@ Editor.Panel.extend({
 
   // html template for panel
   template: `
-    <h2>Localized-Label</h2>
+    <h2>custom-button</h2>
     <hr />
     <div>State: <span id="label">--</span></div>
     <hr />
@@ -16,12 +16,22 @@ Editor.Panel.extend({
   `,
 
   // element and variable binding
-  $: {},
+  $: {
+    btn: '#btn',
+    label: '#label',
+  },
 
   // method executed when template and styles are successfully loaded and initialized
-  ready() {
+  ready () {
     this.$btn.addEventListener('confirm', () => {
-      Editor.Ipc.sendToMain('Localized-Label:clicked')
-    })
+      Editor.Ipc.sendToMain('custom-button:clicked');
+    });
+  },
+
+  // register your ipc messages here
+  messages: {
+    'custom-button:hello' (event) {
+      this.$label.innerText = 'Hello!';
+    }
   }
-})
+});

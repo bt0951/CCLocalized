@@ -1,21 +1,16 @@
 {
-  "name": "Localized-Label",
+  "name": "localized-label",
   "version": "0.0.1",
   "description": "The package template for getting started.",
   "author": "Cocos Creator",
   "main": "main.js",
   "main-menu": {
-    "i18n:MAIN_MENU.package.title/LocalizedLabel/open": {
-      "message": "LocalizedLabel:open"
-    },
-    "i18n:MAIN_MENU.package.title/LocalizedLabel/hello": {
-      "message": "LocalizedLabel:say-hello"
-    }
+    "i18n:MAIN_MENU.package.title/Localized-Label/open": {}
   },
   "panel": {
     "main": "panel/index.js",
     "type": "dockable",
-    "title": "LocalizedLabel",
+    "title": "Localized-Label",
     "width": 400,
     "height": 300
   }

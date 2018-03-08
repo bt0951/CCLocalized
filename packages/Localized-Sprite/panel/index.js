@@ -16,22 +16,12 @@ Editor.Panel.extend({
   `,
 
   // element and variable binding
-  $: {
-    btn: '#btn',
-    label: '#label',
-  },
+  $: {},
 
   // method executed when template and styles are successfully loaded and initialized
-  ready () {
+  ready() {
     this.$btn.addEventListener('confirm', () => {
-      Editor.Ipc.sendToMain('Localized-Sprite:clicked');
-    });
-  },
-
-  // register your ipc messages here
-  messages: {
-    'Localized-Sprite:hello' (event) {
-      this.$label.innerText = 'Hello!';
-    }
+      Editor.Ipc.sendToMain('Localized-Sprite:clicked')
+    })
   }
-});
+})
