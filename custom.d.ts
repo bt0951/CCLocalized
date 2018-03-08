@@ -4,14 +4,26 @@ declare module cc {
     setState: Function
     translate: boolean
     language: number
-    translateTo(): cc.SpriteFrame
+    localizedSpriteFrame: cc.SpriteFrame
+    translateTo(key: string): cc.SpriteFrame
   }
   
   interface Label {
     key: string
     translate: boolean
     language: number
-    translateTo(key: string, ...args): string
+     /**
+    !#zh
+    翻译文本
+    @param key key
+    @param data 数据
+    @example 
+    ```js
+    lbl.translateTo('key', {name: name})
+    lbl.translateTo(['key1', 'key2'], [{name: name}, obj2])
+    ``` 
+    */
+    translateTo(key: string | string[], data?: object | object[]): string
   }
 
   interface AffineTransform {
