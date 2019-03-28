@@ -237,7 +237,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 491.11,
+      "width": 495.57,
       "height": 40
     },
     "_anchorPoint": {
@@ -283,8 +283,8 @@
     "_srcBlendFactor": 1,
     "_dstBlendFactor": 771,
     "_useOriginalSize": false,
-    "_string": "测试测试二 字字字测试三字",
-    "_N$string": "测试测试二 字字字测试三字",
+    "_string": "简 测试 测试二 体 测试三 字",
+    "_N$string": "简 测试 测试二 体 测试三 字",
     "_fontSize": 40,
     "_lineHeight": 40,
     "_enableWrapText": true,
