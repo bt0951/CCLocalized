@@ -1,19 +1,14 @@
+import { initLanguageWithData, localize as _localize } from "../../scene/utils/i18n"
+import { LanguageConf, languageMap } from "../config/LanguageConfig"
+
 const { ccclass, property, executeInEditMode, inspector, menu } = cc._decorator
 
-const Language = cc.Enum({
-  zh: 0,
-  en: 1
-})
-
-const languageMap = {
-  0: cc.sys.LANGUAGE_CHINESE,
-  1: cc.sys.LANGUAGE_ENGLISH
-}
+const Language = cc.Enum(LanguageConf)
 
 @ccclass
 @executeInEditMode
-@inspector('packages://Localized-Label/inspector.js')
-@menu('i18n:MAIN_MENU.component.renderers/Label')
+@inspector("packages://Localized-Label/inspector.js")
+@menu("i18n:MAIN_MENU.component.renderers/Localized-Label")
 export default class LocalizedLabel extends cc.Label {
   // @property({
   //   override: true
@@ -25,159 +20,102 @@ export default class LocalizedLabel extends cc.Label {
   // })
   // public verticalAlign: cc.Label.VerticalAlign = cc.Label.VerticalAlign.CENTER
 
-  @property(Boolean) private _translate: boolean = false
+  @property(Boolean) private _isTranslate: boolean = false
 
   @property({
-    tooltip: '是否翻译为本地语言文本',
-    type: Boolean
+    tooltip: "是否翻译为本地语言文本",
+    type: Boolean,
   })
-  get translate() {
-    return this._translate
+  get isTranslate() {
+    return this._isTranslate
   }
-  set translate(v) {
-    this._translate = v
-    v && this.translateTo(this.key)
+  set isTranslate(v) {
+    this._isTranslate = v
+    v && this.localize(this.k)
   }
 
-  @property private _key: string | string[] = ''
+  @property private _k: string = ""
 
   @property({
-    tooltip: 'key路径'
+    tooltip: "key路径",
   })
-  get key() {
-    return this._key
+  get k() {
+    return this._k
   }
 
-  set key(v) {
+  set k(v) {
     if (v) {
-      this._key = v
-      this._setString(v)
+      this._k = v
+      CC_EDITOR && this._setStringAsync()
     } else {
       this.string = this.string
     }
   }
 
   @property({
-    type: Language
+    type: Language,
   })
-  private _language = Language[this._getSysLanguage()] || Language.zh
+  private _language = Language.简体中文
 
   @property({
-    tooltip: '语言',
-    type: Language
+    tooltip: "语言",
+    type: Language,
   })
   get language() {
     return this._language
   }
   set language(v) {
     this._language = v
-    this.translate && this.translateTo(this.key, this._obj)
+    this._isTranslate && this.localize(this.k, this._obj)
   }
 
   @property(Object) private _obj: object = null
 
-  onLoad() {
-    this._addEventListener()
-    this._changeLanguage()
-  }
-
-  onDestroy() {
-    this._removeEventListener()
-  }
-
-  private _addEventListener() {
-    cc.game.on('CHANGE_LANGUAGE', this._OnChangeLanguage, this)
-  }
-
-  private _removeEventListener() {
-    cc.game.off('CHANGE_LANGUAGE', this._OnChangeLanguage, this)
-  }
-
-  private _OnChangeLanguage(language: string) {
-    let lan = this._getSysLanguage()
-    this._changeLanguage(lan)
-  }
-
-  private _changeLanguage(language?: string) {
-    let lan = language || this._getSysLanguage()
-    this.language = Language[lan]
-  }
-
-  public translateTo(key: string | string[], obj?: object | object[]): string {
-    this.key = key
+  public localize(key: string, obj?: object): string {
+    this.k = key
     this._obj = obj
-    this._setString(key, this._obj)
+    this._localizeString()
     return this.string
   }
 
-  private async _setString(key, data?) {
-    if (!key) {
-      cc.error('%s未配置key', this.name)
-      return
-    }
-    if (cc.js.isString(key)) {
-      let str = await this._getStrByKey(key, data)
-      this.string = str
-    } else if (Array.isArray(key)) {
-      let p = []
-      key.forEach((key, i) => p.push(this._getStrByKey(key, data && data[i])))
-      Promise.all(p)
-        .then(data => {
-          this.string = data.join('')
-        })
-        .catch(err => cc.error(err))
+  private _getFormatedKey(key: string = this.k) {
+    const splitArr = key.split("#")
+    let [_key, opt] = splitArr
+    debugger
+    if (opt) {
+      opt = opt.replace(/\s+/g, "")
+      return { key: _key, opt: JSON.parse(opt) }
+    } else {
+      return { key: _key }
     }
   }
 
-  private async _getStrByKey(key: string, obj?: object) {
-    if (!key) {
-      cc.error('%s未配置key', this.name)
-      return
-    }
-    let _str = key.split('.'),
-      _len = _str.length
-    let str = await this._loadText(),
-      _obj = str[_str[0]]
-    if (!_obj) {
-      cc.error('请检查key: %s配置是否有误', key)
-      return
-    }
-    if (_len == 1) {
-      return _obj
-    } else {
-      let _temp: string
-      _str.forEach((s, i) => {
-        _temp = i == 0 ? _obj : _temp[s]
-      })
-      if (obj != null) {
-        let keys = Object.keys(obj)
-        keys.forEach(key => {
-          _temp = _temp.replace(
-            new RegExp('\\{\\{' + key + '\\}\\}', 'g'),
-            obj[key]
-          )
-        })
-      }
-      return _temp
-    }
+  private _localizeString() {
+    CC_EDITOR ? this._setStringAsync() : this._setString()
+  }
+
+  private _setString() {
+    this.string = _localize(this.k, this._obj)
+  }
+
+  private async _setStringAsync() {
+    await this._loadText()
+    const { key, opt } = this._getFormatedKey(this.k)
+    const str = opt ? _localize(key, opt) : _localize(key)
+    this.string = str
   }
 
   private async _loadText() {
-    let sysLanguage = this._getSysLanguage()
-    let lan = languageMap[this.language] || sysLanguage
-    let url = cc.url.raw(`resources/i18n/Strings-${lan}.json`)
-    try {
-      let str = await this._loadConfig(url)
-      cc.Strings = str
-      return str
-    } catch (error) {
-      cc.error(JSON.stringify(error))
-    }
+    const jsonName = languageMap[this.language]
+    let url = cc.url.raw(`resources/i18n/${jsonName}.json`)
+    const str = await this._loadConfig(url)
+    initLanguageWithData(str)
+    return str
   }
 
   private _loadConfig(url) {
-    return new Promise<cc.Prefab>((resolve, reject) => {
-      cc.loader.load(url, (err, data) => {
+    return new Promise<cc.JsonAsset>((resolve, reject) => {
+      cc.loader.load(url, (err, data: cc.JsonAsset) => {
         if (err) {
           cc.error(err)
           reject(err)
@@ -186,9 +124,5 @@ export default class LocalizedLabel extends cc.Label {
         resolve(data)
       })
     })
-  }
-
-  private _getSysLanguage() {
-    return cc.sys.language
   }
 }

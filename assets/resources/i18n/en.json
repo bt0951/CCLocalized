@@ -1,0 +1,8 @@
+{
+  "test": {
+    "label1": "test",
+    "label2": "text",
+    "testopt": "custome data%{opt}",
+    "testopt2": "label1 %{opt1}%{opt2} label2 %{opt3} label2"
+  }
+}

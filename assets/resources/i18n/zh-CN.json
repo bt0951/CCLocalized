@@ -1,0 +1,8 @@
+{
+  "test": {
+    "label1": "测试简体",
+    "label2": "字字",
+    "testopt": "自定义数据%{opt}",
+    "testopt2": "简 %{opt1} %{opt2} 体 %{opt3} 字"
+  }
+}

@@ -1,5 +1,5 @@
-'use strict'
-Vue.component('Localized-Label', {
+"use strict"
+Vue.component("Localized-Label", {
   template: `
     <ui-prop v-prop="target.string" :multi-values="multi"></ui-prop>
     <ui-prop v-prop="target.horizontalAlign" :multi-values="multi"></ui-prop>
@@ -14,20 +14,20 @@ Vue.component('Localized-Label', {
     <ui-prop v-prop="target.font" :multi-values="multi"></ui-prop>
     <ui-prop v-prop="target.fontFamily" v-show="_isSystemFont()" :multi-values="multi"></ui-prop>
     <ui-prop v-prop="target.useSystemFont" :multi-values="multi"></ui-prop>
-    <ui-prop v-prop="target.translate"></ui-prop>
-		<div v-if="target.translate.value === true">
+    <ui-prop v-prop="target.isTranslate"></ui-prop>
+		<div v-if="target.isTranslate.value === true">
       <ui-prop v-prop="target.language" :multi-values="multi"></ui-prop>
-      <ui-prop v-prop="target.key"></ui-prop>
+      <ui-prop v-prop="target.k"></ui-prop>
     </div>
   `,
   props: {
     target: {
       twoWay: !0,
-      type: Object
+      type: Object,
     },
     multi: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   methods: {
     T: Editor.T,
@@ -43,6 +43,6 @@ Vue.component('Localized-Label', {
     },
     _hiddenActualFontSize() {
       return 2 !== this.target.overflow.value
-    }
-  }
+    },
+  },
 })
