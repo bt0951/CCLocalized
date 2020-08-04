@@ -1,0 +1,7 @@
+{
+    "test.zs": "zhangsan",
+    "test.context": "HP: +%{2*level}%",
+    "ui.locale": "English",
+    "locale.zh_CN": "简体中文",
+    "locale.en": "English"
+}

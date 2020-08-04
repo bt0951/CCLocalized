@@ -1,0 +1,7 @@
+{
+    "test.zs": "张三",
+    "test.context": "生命：+%{2*level}%",
+    "ui.locale": "简体中文",
+    "locale.zh_CN": "简体中文",
+    "locale.en": "English"
+}

@@ -1,4 +1,7 @@
 {
   "engine": "cocos-creator-js",
-  "packages": "packages"
+  "packages": "packages",
+  "name": "Localize",
+  "id": "89a507fb-58ca-491e-92af-b0719a22cbbf",
+  "version": "2.2.2"
 }
