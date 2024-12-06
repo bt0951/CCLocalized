@@ -1,7 +1,7 @@
 import { loadConfig } from "../../utils/Utility";
-import { LocaleType, localize } from "./i18n"
+import { getCurrentLanguage, LocaleType, localize, setLocale } from "./i18n";
 
-const { ccclass, property, menu, executeInEditMode } = cc._decorator
+const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 
 @ccclass
 @executeInEditMode
@@ -11,9 +11,9 @@ export default class LocaleLabel extends cc.Component {
     key: string = "";
 
     @property({ type: cc.Enum(LocaleType) })
-    _previewLocale: LocaleType = LocaleType.zh_Hans;
+    _previewLocale: LocaleType = LocaleType.zh_CN;
     @property({ type: cc.Enum(LocaleType) })
-    get previewLocale() { return this._previewLocale }
+    get previewLocale() { return LocaleType[getCurrentLanguage()] || this._previewLocale }
     private set previewLocale(value) {
         if (CC_EDITOR) {
             if (this._previewLocale != value) {
@@ -22,6 +22,7 @@ export default class LocaleLabel extends cc.Component {
                     loadConfig();
                 }
                 else {
+                    setLocale(LocaleType[value])
                     this.localizeText();
                 }
             }
@@ -30,32 +31,32 @@ export default class LocaleLabel extends cc.Component {
 
     private overrideKey: string = '';
 
-    context: any
+    context: any;
 
-    private localizeCallback: () => string
+    private localizeCallback: () => string;
 
     onEnable() {
-        cc.game.on("locale-changed", this.localizeText, this)
+        cc.game.on("locale-changed", this.localizeText, this);
 
-        this.localizeText()
+        this.localizeText();
     }
 
     private localizeText() {
-        let text: string = this.localizedText
+        let text: string = this.localizedText;
         if (text) {
-            let label = this.getComponent(cc.Label)
+            let label = this.getComponent(cc.Label);
             if (label) {
                 if (label.string != text) {
-                    label.string = text
-                    // this._updateRenderData(label)
+                    label.string = text;
+                    // this._updateRenderData(label);
                 }
             }
             else {
-                let label = this.getComponent(cc.RichText)
+                let label = this.getComponent(cc.RichText);
                 if (label) {
                     if (label.string != text) {
-                        label.string = text
-                        // this._updateRenderData(label)
+                        label.string = text;
+                        // this._updateRenderData(label);
                     }
                 }
             }
@@ -64,13 +65,13 @@ export default class LocaleLabel extends cc.Component {
 
     get localizedText(): string {
         if (this.localizeCallback) {
-            return this.localizeCallback()
+            return this.localizeCallback();
         }
         else if (this.overrideKey || this.key) {
-            return localize(this.overrideKey || this.key, this.context)
+            return localize(this.overrideKey || this.key, this.context);
         }
 
-        return ""
+        return "";
     }
 
     // _updateRenderData(label: cc.Label | cc.RichText) {
@@ -84,39 +85,40 @@ export default class LocaleLabel extends cc.Component {
     // }
 
     onDisable() {
-        cc.game.off("locale-changed", this.localizeText, this)
+        cc.game.off("locale-changed", this.localizeText, this);
     }
 
     setKey(key: string, context?: any) {
-        let dirty = false
+        let dirty = false;
         if (context) {
-            this.context = context
-            dirty = true
+            this.context = context;
+            dirty = true;
         }
 
         if (this.overrideKey != key) {
-            this.overrideKey = key
-            dirty = true
+            this.overrideKey = key;
+            dirty = true;
         }
 
         if (dirty) {
-            this.localizeText()
+            this.localizeText();
         }
     }
 
     setLocalizeCallback(method: () => string) {
-        this.localizeCallback = method
-        this.localizeText()
+        this.localizeCallback = method;
+        this.localizeText();
     }
 }
 
 
 cc.Node.prototype.setLocaleKey = function (key: string, context?: any) {
-    let localeLabel = this.getComponent(LocaleLabel)
+    let localeLabel = this.getComponent(LocaleLabel);
     if (!localeLabel) {
-        localeLabel = this.addComponent(LocaleLabel)
+        localeLabel = this.addComponent(LocaleLabel);
     }
 
-    localeLabel.setKey(key, context)
-    return this
-} 
+    localeLabel.setKey(key, context);
+    return this;
+}
+

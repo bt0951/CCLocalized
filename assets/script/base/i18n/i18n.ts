@@ -1,38 +1,24 @@
 import { evaluateExpression } from "../../share/common/expression";
 
-// /**
-//  * 英语
-//  */
-// const en = "en";
-// /**
-//  * 简体中文
-//  */
-// const zh_Hans = "zh_CN";
-// /**
-//  * 繁体中文
-//  */
-// const zh_Hant = "zh_TW";
-// /**
-//  * 朝鲜语
-//  */
-// const ko = "ko";
-// /**
-//  * 日本语
-//  */
-// const ja = "ja";
-
 export enum LocaleType {
+    /**
+     * 英语
+     */
     en,
-    zh_Hans,
-    zh_Hant,
-    ko,
-    ja,
+    /**
+     * 简体中文
+     */
+    zh_CN,
+    /**
+     * 繁体中文
+     */
+    zh_TW,
 }
 
 /**
  * 支持的本地化语言列表
  */
-export const supportLanguages = [LocaleType.zh_Hans, LocaleType.zh_Hant, LocaleType.ko, LocaleType.ja, LocaleType.en]
+export const supportLanguages = Object.keys(LocaleType).filter((key) => isNaN(Number(key)));
 
 /**
  * 可用 {name} 进行表达式替换
@@ -40,7 +26,7 @@ export const supportLanguages = [LocaleType.zh_Hans, LocaleType.zh_Hant, LocaleT
 let defaultTokenRegex = /\{(.*?)\}/g;
 const LANGUAGE_KEY = "LANGUAGE_KEY";
 
-type Dictionary = { [key: string]: string }
+type Dictionary = { [key: string]: string };
 /**
  * 所有的本地化字典
  */
@@ -55,9 +41,9 @@ let currentLocaliztion: Dictionary;
 let currentLanguage: string;
 
 function translate(key: string, context: any): string {
-    let result: string = currentLocaliztion[key]
+    let result: string = currentLocaliztion[key];
     if (!result) {
-        return key
+        return key;
     }
     return replaceTag(result, context);
 }
@@ -68,25 +54,20 @@ function getPreferLanguage() {
         case "zh-cn":
         case "zh-sg":
         case "zh":
-            return LocaleType[LocaleType.zh_Hans];
+            return LocaleType[LocaleType.zh_CN];
         case "zh-tw":
         case "zh-hk":
         case "zh-mo":
-            return LocaleType[LocaleType.zh_Hant]
+            return LocaleType[LocaleType.zh_TW];
     }
 
-    if (languageCode == "ko") {
-        return LocaleType[LocaleType.ko];
-    }
-    if (languageCode == "ja") {
-        return LocaleType[LocaleType.ja];
-    }
     return LocaleType[LocaleType.en];
 }
 
 function _setLanguage(language: string) {
     cc.sys.localStorage.setItem(LANGUAGE_KEY, language);
-    currentLocaliztion = localizations[language]
+    currentLanguage = language;
+    currentLocaliztion = localizations[language];
 }
 
 /**
@@ -101,11 +82,11 @@ export function initLocale(dicts: typeof localizations) {
 }
 
 export function setLocale(language: string) {
-    if (!currentLanguage) {
+    if (!currentLocaliztion) {
         console.error("本地化模块未初始化")
         return;
     }
-    if (supportLanguages.indexOf(LocaleType[language as keyof typeof LocaleType]) == -1) {
+    if (supportLanguages.indexOf(LocaleType[LocaleType[language as keyof typeof LocaleType]]) == -1) {
         console.error(`不支持语言包${language}`);
         return;
     }
@@ -115,7 +96,7 @@ export function setLocale(language: string) {
 
     _setLanguage(language);
 
-    cc.game.emit("locale-changed", language)
+    cc.game.emit("locale-changed", language);
 }
 
 export function getCurrentLanguage() {
@@ -124,21 +105,21 @@ export function getCurrentLanguage() {
 
 export function localize(key: string, options?: any): string {
     if (!key) {
-        return ''
+        return "";
     }
 
     if (currentLocaliztion) {
         try {
-            return translate(key, options) || key
+            return translate(key, options) || key;
         }
         catch (e) {
-            console.error(e, "语言包错误 " + key, options)
+            console.error(e, "语言包错误 " + key, options);
         }
     }
     else {
-        console.error("本地化字典未加载")
+        console.error("本地化字典未加载");
     }
-    return key
+    return key;
 }
 
 /**

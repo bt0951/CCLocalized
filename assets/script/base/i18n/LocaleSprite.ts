@@ -1,8 +1,9 @@
 import { getCurrentLanguage } from "./i18n";
 
-const { ccclass, property, menu } = cc._decorator;
+const { ccclass, property, menu, executeInEditMode } = cc._decorator;
 
 @ccclass
+@executeInEditMode
 @menu("本地化/LocaleSprite")
 export default class LocaleSprite extends cc.Component {
     @property()
@@ -27,4 +28,5 @@ export default class LocaleSprite extends cc.Component {
     onDisable() {
         cc.game.off("locale-changed", this.localizeSprite, this);
     }
+
 }

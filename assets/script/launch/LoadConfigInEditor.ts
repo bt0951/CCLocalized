@@ -11,12 +11,11 @@ export default class LoadConfigInEditor extends cc.Component {
         loadConfigAsync({
             onComplete: (config: any) => {
                 globalThis._config = config;
-                // cc.game.emit("config-loaded");
                 if (CC_EDITOR) {
                     cc.log("加载配置完成");
-                    console.log(config);
                 }
-                cc.game.emit("locale-changed", LocaleType.zh_Hans);
+                // cc.game.emit("config-loaded");
+                cc.game.emit("locale-changed", LocaleType.zh_CN);
             },
             onProgress: () => { },
             onError: (reason: any) => {
@@ -29,9 +28,7 @@ export default class LoadConfigInEditor extends cc.Component {
     }
 
     start() {
-        this.scheduleOnce(() => {
-            this.loadConfig();
-        }, 2)
+        this.loadConfig();
     }
 
 }

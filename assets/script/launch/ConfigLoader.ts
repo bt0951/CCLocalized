@@ -46,9 +46,9 @@ function loadConfigDir() {
                     reject(e)
                 }
                 else {
-                    a.forEach(a => {
-                        if (!config[a.name]) {
-                            config[a.name] = a.json
+                    a.forEach(e => {
+                        if (!config[e.name]) {
+                            config[e.name] = e.json
                         }
                     })
                     initLocale(config)
@@ -57,32 +57,6 @@ function loadConfigDir() {
             })
     })
 }
-
-// export function loadConfigAsync({ onComplete, onError, onProgress }: LoadingCallback) {
-//     let config = initConfig(load);
-//     let counter = 0;
-//     const MAX = 6;
-//     cc.resources.loadDir("config", cc.JsonAsset, onProgress, (e, a) => {
-//         if (e) {
-//             onError?.(e);
-//         }
-//         else {
-//             a.forEach(a => config[a.name] = a.json)
-//             initLocale(config);
-//             counter += 1;
-//             if (counter == MAX) {
-//                 onComplete(config);
-//             }
-//         }
-//     });
-//     if (CC_EDITOR) {
-//         counter += 4;
-//         if (counter == MAX) {
-//             onComplete(config);
-//         }
-//         return;
-//     }
-// }
 
 export function loadConfigAsync({ onComplete, onError, onProgress }: LoadingCallback) {
     Promise.all(
