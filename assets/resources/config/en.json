@@ -1,7 +1,11 @@
 {
-    "test.zs": "zhangsan",
-    "test.context": "HP: +%{2*level}%",
-    "ui.locale": "English",
+    "ui.main_menu": "主菜单",
+    "skill.type_1": "普通攻击",
+    "locale.lang": "English",
     "locale.zh_CN": "简体中文",
-    "locale.en": "English"
+    "locale.zh_TW": "繁體中文",
+    "locale.en": "English",
+    "locale.ko": "한국어",
+    "locale.jp": "日本語",
+    "weapon.100100": "轻剑"
 }
